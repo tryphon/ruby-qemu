@@ -25,7 +25,7 @@ module QEMU
     end
 
     class Disk
-      
+
       attr_accessor :file, :options
 
       def initialize(file, options = {})
@@ -34,9 +34,10 @@ module QEMU
       end
 
       def qemu_drive(index)
-        { 
+        {
           :file => File.expand_path(file),
           :index => index,
+          :if => "virtio"
         }.merge(options).map { |k,v| "#{k}=#{v}" }.join(',')
       end
 
@@ -48,7 +49,7 @@ module QEMU
     def vde_options
       @vde_options ||= { :sock => "/var/run/vde2/tap0.ctl" }
     end
-   
+
     attr_accessor :vnc
 
     attr_accessor :monitor
@@ -93,7 +94,7 @@ module QEMU
 
     def command_env
       {}.tap do |env|
-        env["QEMU_AUDIO_DRV"] = audio_driver 
+        env["QEMU_AUDIO_DRV"] = audio_driver
         env["QEMU_ALSA_DAC_DEV"] = alsa_dac_dev if alsa_dac_dev
         env["QEMU_ALSA_ADC_DEV"] = alsa_adc_dev if alsa_adc_dev
       end
