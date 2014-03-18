@@ -110,7 +110,11 @@ module QEMU
     end
 
     def daemon
-      @daemon ||= Daemon.new :command => command, :name => name, :arguments => command_arguments, :env => command_env
+      @daemon ||=
+        begin
+          QEMU.logger.debug "Prepare daemon with '#{command_arguments}'"
+          Daemon.new :command => command, :name => name, :arguments => command_arguments, :env => command_env
+        end
     end
 
   end
