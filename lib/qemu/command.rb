@@ -9,6 +9,12 @@ module QEMU
 
     attr_accessor :memory
 
+    attr_accessor :architecture
+
+    def architecture
+      @architecture ||= :i386
+    end
+
     attr_reader :disks
     def disks
       @disks ||= Disks.new
@@ -74,6 +80,8 @@ module QEMU
 
     def command_arguments
       [].tap do |args|
+        args << "-enable-kvm"
+
         args << "-m" << "#{memory}m" if memory
         disks.each_with_index do |disk, index|
           args << "-drive" << disk.qemu_drive(index)
@@ -100,8 +108,13 @@ module QEMU
       end
     end
 
+    @@command_system_aliases = {
+      "amd64" => "x86_64"
+    }
+
     def command
-      "/usr/bin/kvm"
+      system = @@command_system_aliases.fetch(architecture.to_s, architecture.to_s)
+      "/usr/bin/qemu-system-#{system}"
     end
 
     def run
