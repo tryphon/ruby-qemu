@@ -32,6 +32,10 @@ module QEMU
       QEMU.sh! "qemu-img create -f #{format} #{options_arguments} #{file} #{size}"
     end
 
+    def exists?
+      File.exists? file
+    end
+
     def self.output_file(file, format)
       unless file.to_s.end_with? ".#{format}"
         "#{file}.#{format}"
