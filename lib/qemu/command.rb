@@ -78,6 +78,8 @@ module QEMU
 
     attr_accessor :alsa_dac_dev, :alsa_adc_dev
 
+    attr_accessor :usb
+
     def command_arguments
       [].tap do |args|
         args << "-enable-kvm"
@@ -95,6 +97,9 @@ module QEMU
         else
           args << "-nographic"
         end
+
+        args << "-usb" if usb
+
         args << "-monitor" << monitor if monitor
         args << "-soundhw" << sound_hardware if sound_hardware
       end
