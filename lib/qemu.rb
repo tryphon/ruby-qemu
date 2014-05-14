@@ -6,6 +6,14 @@ module QEMU
   end
 end
 
+class Hash
+
+  def to_command(separator = ',')
+    map { |k,v| "#{k}=#{v}" }.join separator
+  end
+
+end
+
 require 'qemu/version'
 require 'qemu/logger'
 
