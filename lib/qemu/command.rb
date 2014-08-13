@@ -84,7 +84,7 @@ module QEMU
       [].tap do |args|
         args << "-enable-kvm"
 
-        args << "-m" << "#{memory}m" if memory
+        args << "-m" << memory.to_s if memory
         disks.each_with_index do |disk, index|
           args << "-drive" << disk.qemu_drive(index)
         end
@@ -130,7 +130,7 @@ module QEMU
     def daemon
       @daemon ||=
         begin
-          QEMU.logger.debug "Prepare daemon with '#{command_arguments}'"
+          QEMU.logger.debug "Prepare daemon with '#{command_arguments.join(' ')}'"
           Daemon.new :command => command, :name => name, :arguments => command_arguments, :env => command_env
         end
     end

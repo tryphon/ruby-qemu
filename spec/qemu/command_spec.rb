@@ -35,4 +35,20 @@ describe QEMU::Command do
     end
 
   end
+
+  describe "#command_arguments" do
+
+    it "should include -m with memory size" do
+      subject.memory = 800
+      subject.command_arguments.should include("-m", "800")
+    end
+
+    it "should not include -m when no memory is specified" do
+      subject.memory = nil
+      subject.command_arguments.should_not include("-m")
+    end
+
+
+  end
+
 end
